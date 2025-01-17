@@ -182,13 +182,12 @@ ShapeProps) {
         >
           <boxGeometry args={[1, 1, 1]} />
           <animated.meshStandardMaterial color={springs.color} />
-          {controlsVisible ? (
-            moduleObj.module.type === "instrument" ? (
+          {controlsVisible &&
+            (moduleObj.module.type === "instrument" ? (
               <ControlsInstrument instrument={moduleObj.module.instrument!} />
             ) : moduleObj.module.type === "datasource" ? (
               <ControlsDatasource />
-            ) : null
-          ) : null}
+            ) : null)}
 
           {/* uncomment the following to track whether this object re-renders due to state change (import Html from drei) */}
           {/* <CubePositionDebugger position={moduleObj.module.worldPos} /> */}
