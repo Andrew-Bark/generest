@@ -15,6 +15,7 @@ import Shape from "./components/Shape.tsx";
 import Line from "./components/Line.tsx";
 import { Instrument, transport } from "./instrument.tsx";
 import { Datasource } from "./datasource.tsx";
+import ControlsInstrument from "./components/ControlsInstrument.tsx";
 
 // A Module can be an instrument, an online data source (API) or another trigger,
 // each represented by a 3d shape in the interface.

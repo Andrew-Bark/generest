@@ -98,7 +98,7 @@ ShapeProps) {
 
       //Shows
       api.start({
-        scale: expanded ? 7 : 1,
+        scale: expanded ? 1 : 1,
       });
     };
   }, [active]);
@@ -119,7 +119,7 @@ ShapeProps) {
   // Executes on each frame render - CAREFUL: https://r3f.docs.pmnd.rs/api/hooks#useframe
   useFrame(() => {
     // update shape rotation
-    rotationY.current = rotationY.current - 0.02;
+    // rotationY.current = rotationY.current - 0.02;
     if (rotating.current) {
       meshRef.current.rotation.y = rotationY.current;
     }
