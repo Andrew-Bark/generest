@@ -10,63 +10,12 @@
 import './App.css';
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Mesh, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import Shape from './components/Shape.tsx';
 import Line from './components/Line.tsx';
 import { Instrument, transport } from './instrument.tsx';
 import { Datasource } from './datasource.tsx';
-
-// A Module can be an instrument, an online data source (API) or another trigger,
-// each represented by a 3d shape in the interface.
-// TODO: Move to models/Module.ts | Rename to Cube
-export class Module {
-  // todo: put classes in a different file?
-  // note: position here is the original position at creation and does not change (position in the "menu")
-  // worldPos is the updated position in absolute world coordinates (original position + position
-  // of DragControls, the parent of the shape mesh). See updatePosition() in Shape for how this is calculated
-  type: string;
-  color: string;
-  position: Vector3;
-  worldPos: Vector3;
-  instrument: Instrument | undefined;
-  datasource: Datasource | undefined;
-  meshRef: React.MutableRefObject<Mesh> | undefined; // reference to the Shape mesh (e.g. cube)
-  constructor(
-    type: string,
-    position: Vector3,
-    instrument: Instrument | undefined,
-    datasource: Datasource | undefined
-  ) {
-    this.type = type;
-    this.position = position;
-    this.worldPos = position;
-    this.instrument = instrument;
-    this.datasource = datasource;
-    this.meshRef = undefined;
-    switch (type) {
-      case 'datasource':
-        this.color = 'royalblue';
-        break;
-      case 'trigger':
-        this.color = 'hotpink';
-        break;
-      case 'instrument':
-        this.color = 'orange';
-        break;
-      default:
-        this.color = 'white';
-    }
-  }
-  clone(position: Vector3) {
-    if (this.type === 'datasource') {
-      return new Module(this.type, position, undefined, this.datasource);
-    } else if (this.type === 'instrument') {
-      return new Module(this.type, position, new Instrument(), undefined);
-    } else {
-      return new Module(this.type, position, undefined, undefined);
-    }
-  }
-}
+import Module from './components/Module.tsx';
 
 // to track the state of modules in App.tsx, modules are wrapped in an object with numeric id
 // (this can probably be refactored, it is a relatively late addition)
@@ -110,19 +59,19 @@ function App() {
   function createShapes() {
     // TODO: Refactor addModule -> src
     const datasource = new Module(
-      "datasource",
+      'datasource',
       new Vector3(-3, 6, 0),
       undefined,
       new Datasource()
     );
     const trigger = new Module(
-      "trigger",
+      'trigger',
       new Vector3(0, 6, 0),
       undefined,
       undefined
     );
     const instrument = new Module(
-      "instrument",
+      'instrument',
       new Vector3(3, 6, 0),
       new Instrument(),
       undefined
@@ -140,7 +89,7 @@ function App() {
   // TODO: initialize with useEffect - outside of this function (move to top of file)
   if (modules.length === 0) {
     createShapes();
-    console.log("createShapes called");
+    console.log('createShapes called');
   }
 
   // start main time component of Tone.js
@@ -148,14 +97,14 @@ function App() {
     transport.start();
     // loop through instruments and stop them
     modules.forEach((m) => {
-      if (m.module.type === "instrument") m.module.instrument?.playSequence();
+      if (m.module.type === 'instrument') m.module.instrument?.playSequence();
     });
   };
   const handleStop = () => {
     transport.stop();
     // loop through instruments and stop them
     modules.forEach((m) => {
-      if (m.module.type === "instrument") m.module.instrument?.stopSequence();
+      if (m.module.type === 'instrument') m.module.instrument?.stopSequence();
     });
   };
 
@@ -172,7 +121,7 @@ function App() {
       // return a list of existing modules plus the new one with id = maxId + 1
       const updatedModules = [
         ...existingModules,
-        { id: maxId + 1, module: newModule },
+        { id: maxId + 1, module: newModule }
       ];
       return updatedModules;
     });
@@ -185,7 +134,7 @@ function App() {
       updatedModules[moduleObj.id].module = moduleObj.module;
       return updatedModules;
     });
-    console.log("in App: modules updated");
+    console.log('in App: modules updated');
   }
 
   // TODO: Move to utils/connection.utils.ts
@@ -200,7 +149,7 @@ function App() {
       // return a list of existing connections plus the new one with id = maxId + 1
       return [
         ...existingConnections,
-        { id: maxId + 1, connection: newConnection },
+        { id: maxId + 1, connection: newConnection }
       ];
     });
   }
