@@ -15,34 +15,22 @@ import Shape from './components/Shape.tsx';
 import Line from './components/Line.tsx';
 import { Instrument, transport } from './instrument.tsx';
 import { Datasource } from './datasource.tsx';
-import Module from './components/Module.tsx';
+import Module from './models/module.ts';
+import { ConnectionObj, ModuleObj } from './models/types.ts';
 
 // to track the state of modules in App.tsx, modules are wrapped in an object with numeric id
 // (this can probably be refactored, it is a relatively late addition)
 // TODO: Move to a models/types.ts
-export interface ModuleObj {
-  id: number;
-  module: Module;
-}
+
 
 // A connection is formed between two modules, from a datasource
 // (in the future maybe also from a trigger) to an instrument
 // TODO: Move to models/Connection.ts
-export class Connection {
-  fromModuleId: number; // add Trigger here later
-  toModuleId: number;
-  constructor(fromModuleId: number, toModuleId: number) {
-    this.fromModuleId = fromModuleId;
-    this.toModuleId = toModuleId;
-  }
-}
+
 
 // to track the state of connections in App.tsx, connections are wrapped in an object with numeric id
 // TODO: Move to a models/types.ts
-export interface ConnectionObj {
-  id: number;
-  connection: Connection;
-}
+
 
 function App() {
   // States ###############################################

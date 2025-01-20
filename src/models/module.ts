@@ -3,10 +3,6 @@ import { Datasource } from "../datasource";
 import { Instrument } from "../instrument";
 
 export default class Module {
-
-  // note: position here is the original position at creation and does not change (position in the "menu")
-  // worldPos is the updated position in absolute world coordinates (original position + position
-  // of DragControls, the parent of the shape mesh). See updatePosition() in Shape for how this is calculated
   type: string;
   color: string;
   position: Vector3;
