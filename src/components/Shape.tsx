@@ -10,11 +10,13 @@ import { Mesh, Vector3 } from "three";
 import { useSpring, animated } from "@react-spring/three";
 import { DragControls, Html } from "@react-three/drei";
 // import { Html } from "@react-three/drei";
-import { Module, ModuleObj, Connection } from "@/App";
 import ControlsInstrument from "@/components/ControlsInstrument";
 import ControlsDatasource from "@/components/ControlsDatasource";
 import { connectSourceToInstrument } from "@/helpers/shape-function";
 import CubePositionDebugger from "@/components/CubePositionDebugger";
+import Module from "@/models/module";
+import { ModuleObj } from "@/models/types";
+import Connection from "@/models/connection";
 
 // A property object that is passed to the Shape component
 interface ShapeProps {

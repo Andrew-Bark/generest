@@ -7,30 +7,28 @@
  * Guaranteed 100% AI free :)
  */
 
-import './App.css';
-import { useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Vector3 } from 'three';
-import Shape from './components/Shape.tsx';
-import Line from './components/Line.tsx';
-import { Instrument, transport } from './instrument.tsx';
-import { Datasource } from './datasource.tsx';
-import Module from './models/module.ts';
-import { ConnectionObj, ModuleObj } from './models/types.ts';
+import "./App.css";
+import { useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Vector3 } from "three";
+import Shape from "./components/Shape.tsx";
+import Line from "./components/Line.tsx";
+import { Instrument, transport } from "./instrument.tsx";
+import { Datasource } from "./datasource.tsx";
+import Module from "./models/module.ts";
+import { ConnectionObj, ModuleObj } from "./models/types.ts";
+import Connection from "./models/connection.ts";
 
 // to track the state of modules in App.tsx, modules are wrapped in an object with numeric id
 // (this can probably be refactored, it is a relatively late addition)
 // TODO: Move to a models/types.ts
 
-
 // A connection is formed between two modules, from a datasource
 // (in the future maybe also from a trigger) to an instrument
 // TODO: Move to models/Connection.ts
 
-
 // to track the state of connections in App.tsx, connections are wrapped in an object with numeric id
 // TODO: Move to a models/types.ts
-
 
 function App() {
   // States ###############################################
@@ -47,25 +45,25 @@ function App() {
   function createShapes() {
     // TODO: Refactor addModule -> src
     const datasource = new Module(
-      'datasource',
+      "datasource",
       new Vector3(-3, 6, 0),
       undefined,
       new Datasource()
     );
-    const trigger = new Module(
-      'trigger',
-      new Vector3(0, 6, 0),
-      undefined,
-      undefined
-    );
+    // const trigger = new Module(
+    //   "trigger",
+    //   new Vector3(0, 6, 0),
+    //   undefined,
+    //   undefined
+    // );
     const instrument = new Module(
-      'instrument',
+      "instrument",
       new Vector3(3, 6, 0),
       new Instrument(),
       undefined
     );
     addModule(datasource);
-    addModule(trigger);
+    // addModule(trigger);
     addModule(instrument);
     // todo: do this dynamically when interacting with the datasource controls
     const yesterday = new Date(Date.now());
@@ -77,7 +75,7 @@ function App() {
   // TODO: initialize with useEffect - outside of this function (move to top of file)
   if (modules.length === 0) {
     createShapes();
-    console.log('createShapes called');
+    console.log("createShapes called");
   }
 
   // start main time component of Tone.js
@@ -85,14 +83,14 @@ function App() {
     transport.start();
     // loop through instruments and stop them
     modules.forEach((m) => {
-      if (m.module.type === 'instrument') m.module.instrument?.playSequence();
+      if (m.module.type === "instrument") m.module.instrument?.playSequence();
     });
   };
   const handleStop = () => {
     transport.stop();
     // loop through instruments and stop them
     modules.forEach((m) => {
-      if (m.module.type === 'instrument') m.module.instrument?.stopSequence();
+      if (m.module.type === "instrument") m.module.instrument?.stopSequence();
     });
   };
 
@@ -109,7 +107,7 @@ function App() {
       // return a list of existing modules plus the new one with id = maxId + 1
       const updatedModules = [
         ...existingModules,
-        { id: maxId + 1, module: newModule }
+        { id: maxId + 1, module: newModule },
       ];
       return updatedModules;
     });
@@ -122,7 +120,7 @@ function App() {
       updatedModules[moduleObj.id].module = moduleObj.module;
       return updatedModules;
     });
-    console.log('in App: modules updated');
+    console.log("in App: modules updated");
   }
 
   // TODO: Move to utils/connection.utils.ts
@@ -137,7 +135,7 @@ function App() {
       // return a list of existing connections plus the new one with id = maxId + 1
       return [
         ...existingConnections,
-        { id: maxId + 1, connection: newConnection }
+        { id: maxId + 1, connection: newConnection },
       ];
     });
   }
