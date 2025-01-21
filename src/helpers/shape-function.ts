@@ -1,4 +1,4 @@
-import { ModuleObj} from "../App";
+import { ModuleObj } from "@/models/types";
 
 interface connectSourceToInstrumentProps {
     fromModule: ModuleObj;

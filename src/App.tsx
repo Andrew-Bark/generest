@@ -120,7 +120,6 @@ function App() {
       updatedModules[moduleObj.id].module = moduleObj.module;
       return updatedModules;
     });
-    console.log("in App: modules updated");
   }
 
   // TODO: Move to utils/connection.utils.ts

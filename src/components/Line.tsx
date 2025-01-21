@@ -1,6 +1,5 @@
-import { Vector3, ArrowHelper } from 'three';
-import { Html } from '@react-three/drei';
-import { ConnectionObj, ModuleObj } from '../App';
+import { Vector3, ArrowHelper } from "three";
+import { ConnectionObj, ModuleObj } from "@/models/types";
 
 interface LineProps {
   connectionObj: ConnectionObj;
@@ -17,12 +16,12 @@ function Line(props: LineProps) {
   const direction = new Vector3().subVectors(posTo, posFrom).normalize(); // todo: understand why normalize is needed here
   const distance = new Vector3().subVectors(posTo, posFrom).length();
   const arrow = new ArrowHelper(direction, posFrom, distance);
+  const cylinderRotation = arrow.rotation.clone();
 
   // generate properties for a cylinder mesh to represent the connection
   const cylinderDirection = new Vector3(...direction).multiplyScalar(
     distance / 2
   );
-  const cylinderRotation = arrow.rotation.clone();
   const cylinderPosition = new Vector3().addVectors(posFrom, cylinderDirection);
 
   // JSX
@@ -30,23 +29,28 @@ function Line(props: LineProps) {
     <>
       <mesh position={cylinderPosition} rotation={cylinderRotation}>
         <cylinderGeometry args={[0.1, 0.1, distance, 32]} />
-        <meshStandardMaterial color={'slategray'} />
+        <meshStandardMaterial color={"slategray"} />
       </mesh>
-      {/* <arrowHelper args={[direction, posFrom, distance]} /> */}
-      {/* <Html>
-        <span>baseX {Math.round(posFrom!.x * 10) / 10}</span><br />
-        <span>baseY {Math.round(posFrom!.y * 10) / 10}</span><br />
-        <span>baseZ {Math.round(posFrom!.z * 10) / 10}</span><br />
-        <span>tipX {Math.round(posTo!.x * 10) / 10}</span><br />
-        <span>tipY {Math.round(posTo!.y * 10) / 10}</span><br />
-        <span>tipZ {Math.round(posTo!.z * 10) / 10}</span><br />
-        <span>directionX {Math.round(direction.x * 10) / 10}</span><br />
-        <span>directionY {Math.round(direction.y * 10) / 10}</span><br />
-        <span>directionZ {Math.round(direction.z * 10) / 10}</span><br />
-        <span>direction.length {Math.round(direction.length() * 10) / 10}</span><br />
-      </Html> */}
     </>
   );
 }
 
 export default Line;
+
+{
+  /* <arrowHelper args={[direction, posFrom, distance]} /> */
+}
+{
+  /* <Html>
+  <span>baseX {Math.round(posFrom!.x * 10) / 10}</span><br />
+  <span>baseY {Math.round(posFrom!.y * 10) / 10}</span><br />
+  <span>baseZ {Math.round(posFrom!.z * 10) / 10}</span><br />
+  <span>tipX {Math.round(posTo!.x * 10) / 10}</span><br />
+  <span>tipY {Math.round(posTo!.y * 10) / 10}</span><br />
+  <span>tipZ {Math.round(posTo!.z * 10) / 10}</span><br />
+  <span>directionX {Math.round(direction.x * 10) / 10}</span><br />
+  <span>directionY {Math.round(direction.y * 10) / 10}</span><br />
+  <span>directionZ {Math.round(direction.z * 10) / 10}</span><br />
+  <span>direction.length {Math.round(direction.length() * 10) / 10}</span><br />
+</Html> */
+}

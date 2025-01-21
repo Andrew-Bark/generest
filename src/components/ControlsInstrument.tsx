@@ -4,7 +4,7 @@
 import "./Controls.css";
 import { Html } from "@react-three/drei";
 import { Instrument } from "../instrument";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "./ui/slider";
@@ -32,45 +32,45 @@ function ControlsInstrument({ instrument }: controlsProps) {
   const octaveArray = [2, 3, 4, 5, 6, 7];
   const octaveRangeArray = [0, 1, 2, 3, 4];
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isStopped, setIsStopped] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(instrument.isPlaying);
   const [isOpen, setIsOpen] = useState(true);
 
   const [formData, setFormData] = useState<IFormData>({
     tempo: {
       title: "Tempo",
-      sliderPointer: [2],
-      callback: instrument.setSequenceTempo,
+      sliderPointer: [tempo.indexOf(instrument.sequenceSubdivision)],
+      callback: (tempo) => instrument.setSequenceTempo(tempo),
       array: tempo,
     },
     scale: {
       title: "Scale",
-      sliderPointer: [2],
-      callback: instrument.setScale,
+      sliderPointer: [0],
+      callback: (scaleName) => instrument.setScale(scaleName),
       array: scaleArray,
     },
     noteLength: {
       title: "Note Length",
-      sliderPointer: [2],
-      callback: instrument.setNoteDuration,
+      sliderPointer: [tempo.indexOf(instrument.noteDuration)],
+      callback: (noteLength) => instrument.setNoteDuration(noteLength),
       array: tempo,
     },
-    sequenceLength: {
-      title: "Sequence Length",
-      sliderPointer: [2],
-      callback: instrument.setNNotesInSequence,
-      array: tempo,
-    },
+    // sequenceLength: {
+    //   title: "Sequence Length",
+    //   sliderPointer: [tempo.indexOf(instrument.sequ)],
+    //   callback: (sequenceLength) =>
+    //     instrument.setNNotesInSequence(sequenceLength),
+    //   array: tempo,
+    // },
     octave: {
       title: "Octave",
-      sliderPointer: [2],
-      callback: instrument.setOctave,
+      sliderPointer: [octaveArray.indexOf(instrument.octave)],
+      callback: (octave) => instrument.setOctave(octave),
       array: octaveArray,
     },
     octaveRange: {
       title: "Octave Range",
-      sliderPointer: [2],
-      callback: instrument.setOctaveRange,
+      sliderPointer: [instrument.rangeOct],
+      callback: (octaveRange) => instrument.setOctaveRange(octaveRange),
       array: octaveRangeArray,
     },
   });
@@ -79,8 +79,7 @@ function ControlsInstrument({ instrument }: controlsProps) {
     sliderPointer: number[],
     key: keyof typeof formData
   ) => {
-    console.log("value in slider change", sliderPointer);
-    console.log("key in slider change", key);
+    console.log("value in slider", key, "changed to", sliderPointer);
 
     setFormData((prev) => ({
       ...prev,
@@ -90,12 +89,10 @@ function ControlsInstrument({ instrument }: controlsProps) {
 
   const handleClickPlay = () => {
     setIsPlaying(true);
-    setIsStopped(false);
     instrument.playSequence();
   };
   const handleClickStop = () => {
     setIsPlaying(false);
-    setIsStopped(true);
     instrument.stopSequence();
   };
 
@@ -104,6 +101,7 @@ function ControlsInstrument({ instrument }: controlsProps) {
   checkOutsideClick(cardRef, () => {
     setIsOpen(false);
   });
+
   return (
     <Html>
       {isOpen && (
@@ -112,11 +110,11 @@ function ControlsInstrument({ instrument }: controlsProps) {
             <Button onClick={handleClickPlay}>
               <Play className={isPlaying ? "fill-white" : ""} />
             </Button>
-            <CardTitle className="text-white  text-center text-xl">
+            <CardTitle className="text-white text-center text-xl">
               Instrument
             </CardTitle>
             <Button onClick={handleClickStop}>
-              <Square className={isStopped ? "fill-white" : ""} />
+              <Square className={isPlaying ? "" : "fill-white"} />
             </Button>
           </CardHeader>
 
@@ -139,10 +137,12 @@ function ControlsInstrument({ instrument }: controlsProps) {
                       onValueCommit={(sliderPointer: number[]): void => {
                         callback(array[sliderPointer[0]]);
                       }}
+                      className="cursor-pointer"
                     />
                     <div className="flex justify-between text-sm ">
                       {array.map((textValue: string | number, index) => (
                         <span
+                          key={index}
                           className={
                             index === sliderPointer[0] ? "font-bold" : ""
                           }

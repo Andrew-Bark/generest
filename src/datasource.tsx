@@ -1,4 +1,9 @@
 /** Datasource represents an API, to be used as a Module. generates input for instrument */
+
+// As far as i am aware, this api call is sent to the local server at port 3000.
+// The server a proxy to make the api service think it's from newcastle
+// Because Newcastle API doesn't allow CORS.
+
 export class Datasource {
   // two-part API url; a specific entity (e.g. sensor name) is added in between (setEntity())
   // final fetch call will be on (baseUrl + entity + pathEnd + [query parameters])
@@ -18,14 +23,14 @@ export class Datasource {
     } else {
       // use default API url (Newcastle Urban Observatory) if optional url was not passed
       this.url = {
-        baseUrl: 'http://localhost:3000/api/nuo/api/v1.1/sensors/',
-        pathEnd: '/data/json/',
+        baseUrl: "http://localhost:3000/api/nuo/api/v1.1/sensors/",
+        pathEnd: "/data/json/",
       };
     }
     this.entity = entity
       ? entity
-      : 'PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_NORTH';
-    this.dataVariable = dataVariable ? dataVariable : 'Walking';
+      : "PER_PEOPLE_NCLPILGRIMSTMARKETLN_FROM_SOUTH_TO_NORTH";
+    this.dataVariable = dataVariable ? dataVariable : "Walking";
     this.numberArray = [];
   }
 
@@ -44,12 +49,12 @@ export class Datasource {
     const nextDayFormatted = this.#getDayFormatted(nextDay);
 
     // construct query url from parts: baseUrl + entity + pathEnd + [query parameters]
-    let queryUrl = '';
+    let queryUrl = "";
     let path: string;
-    if (this.url.pathEnd.startsWith('/')) {
+    if (this.url.pathEnd.startsWith("/")) {
       path = this.entity + this.url.pathEnd;
     } else {
-      path = this.entity + '/' + this.url.pathEnd;
+      path = this.entity + "/" + this.url.pathEnd;
     }
     try {
       const fullUrl = new URL(path, this.url.baseUrl).href;
@@ -57,37 +62,37 @@ export class Datasource {
         starttime: dayFormatted,
         endtime: nextDayFormatted,
       });
-      queryUrl = fullUrl + '?' + queryParams.toString();
+      queryUrl = fullUrl + "?" + queryParams.toString();
     } catch (error) {
-      console.log('ERROR: problem constructing query url - ', error);
+      console.log("ERROR: problem constructing query url - ", error);
     }
 
     // fetch data
     try {
-      console.log('trying to fetch with query url: ' + queryUrl);
+      console.log("trying to fetch with query url: " + queryUrl);
       const response = await fetch(queryUrl, {
-        mode: 'cors',
-        method: 'GET',
+        mode: "cors",
+        method: "GET",
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
       const json = await response.json();
-      console.log('Hurray: fetched data from ' + queryUrl);
+      console.log("Hurray: fetched data from " + queryUrl);
       console.log(json);
       this.rawDataFromApi = json;
     } catch (error) {
-      console.log('ERROR: problem fetching data from API: ', error);
+      console.log("ERROR: problem fetching data from API: ", error);
     }
 
     // extract numbers from raw data
     try {
       this.extractNumberArrayFromRawData();
     } catch (error) {
-      console.log('ERROR: problem extracting numberArray from data: ', error);
+      console.log("ERROR: problem extracting numberArray from data: ", error);
     }
   }
 
@@ -98,16 +103,16 @@ export class Datasource {
     for (let idx in sensorData) {
       this.numberArray.push(sensorData[idx].Value);
     }
-    console.log('sensorData: ', sensorData);
-    console.log('numberArray: ', this.numberArray);
+    console.log("sensorData: ", sensorData);
+    console.log("numberArray: ", this.numberArray);
   }
 
   /** Private method to get formatted day (YYYYMMDD) */
   #getDayFormatted(date: Date) {
     return (
       date.getFullYear().toString() +
-      (date.getMonth() + 1).toString().padStart(2, '0') +
-      date.getDate().toString().padStart(2, '0')
+      (date.getMonth() + 1).toString().padStart(2, "0") +
+      date.getDate().toString().padStart(2, "0")
     );
   }
 }

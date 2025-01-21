@@ -1,5 +1,5 @@
-import * as Tone from 'tone';
-import { range, min, max, mean } from 'lodash';
+import * as Tone from "tone";
+import { range, min, max, mean } from "lodash";
 
 // IMPORTANT: Browsers will not play any audio until a user clicks something. (see docs)
 
@@ -21,7 +21,7 @@ class Transport {
 
   start() {
     // start transport 100ms in the future to reduce audio failures
-    Tone.getTransport().start('+0.1');
+    Tone.getTransport().start("+0.1");
   }
   stop() {
     Tone.getTransport().stop();
@@ -36,9 +36,9 @@ export const transport = Transport.getInstance();
 // to generate arbitrary scales, maybe look at Tone.Frequency().harmonize():
 // https://tonejs.github.io/docs/15.0.4/classes/FrequencyClass.html#harmonize
 export const scales = {
-  Dminor: ['D', 'E', 'F', 'G', 'A', 'B', 'C'],
-  Dpenta: ['D', 'F', 'G', 'A', 'C'],
-  Fmajor: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
+  Dminor: ["D", "E", "F", "G", "A", "B", "C"],
+  Dpenta: ["D", "F", "G", "A", "C"],
+  Fmajor: ["F", "G", "A", "Bb", "C", "D", "E"],
 };
 
 /** Instrument to be used as a Module. generates sound from input using Tone.js */
@@ -63,15 +63,15 @@ export class Instrument {
     // create synthesizer and connect to main output (speakers)
     this.synth = new Tone.Synth().toDestination();
     this.synth.volume.value = -8;
-    console.log('VOL: ', this.synth.volume.value)
-    this.scale = scales['Dminor'];
+    console.log("VOL: ", this.synth.volume.value);
+    this.scale = scales["Dminor"];
     (this.octave = 4), (this.rangeOct = 2), (this.sequence = null);
     this.notes = [];
     this.dataArray = [];
     this.sequenceEvents = [];
-    this.sequenceSubdivision = '8n';
+    this.sequenceSubdivision = "8n";
     this.nNotesInSequence = 32;
-    this.noteDuration = '16n';
+    this.noteDuration = "16n";
     this.distortionLevel = 0.4;
     this.distortion = new Tone.Distortion(this.distortionLevel).toDestination();
     this.reverbDecay = 0.3;
@@ -88,13 +88,19 @@ export class Instrument {
       this.octave - this.rangeOct,
       this.octave + this.rangeOct + 1
     );
-    console.log('creating notes from octave ', this.octave, ' & range ', this.rangeOct, ': ', octaves)
+    console.log(
+      "creating notes from octave ",
+      this.octave,
+      " & range ",
+      this.rangeOct,
+      ": ",
+      octaves
+    );
     this.notes = [];
     for (let oct of octaves) {
       this.notes = [...this.notes, ...this.scale.map((note) => note + oct)];
     }
-    console.log('...created available notes: ');
-    console.log(this.notes);
+    console.log("...created available notes:", this.notes);
   }
 
   /** generate note events from data points by mapping the range of data to the available notes */
@@ -108,7 +114,7 @@ export class Instrument {
     const minData = min(data)!;
     const maxData = max(data)!;
     const rangeData = maxData - minData;
-    console.log('min, max range: ', minData, maxData, rangeData);
+    console.log("min, max range: ", minData, maxData, rangeData);
     // create array of evently spaced bins (n = available notes)
     const binsize = rangeData / this.notes.length;
     const binCenters: number[] = range(
@@ -123,8 +129,12 @@ export class Instrument {
     // loop over number of notes in sequence
     for (let iNote = 0; iNote < this.nNotesInSequence; iNote++) {
       // get the indices of data points to average
-      const firstNumIdx = Math.round((iNote / this.nNotesInSequence) * (nNumbers - 1)); // note: -1 might not be needed
-      const lastNumIdx = Math.round(((iNote + 1) / this.nNotesInSequence) * (nNumbers - 1));
+      const firstNumIdx = Math.round(
+        (iNote / this.nNotesInSequence) * (nNumbers - 1)
+      ); // note: -1 might not be needed
+      const lastNumIdx = Math.round(
+        ((iNote + 1) / this.nNotesInSequence) * (nNumbers - 1)
+      );
       const numAverageForNote = mean(data.slice(firstNumIdx, lastNumIdx));
       // this keeps track of minimum distance to bin centers. reset to maximum possible distance (range of data)
       minDist = rangeData;
@@ -138,8 +148,7 @@ export class Instrument {
       // add the corresponding note to events
       events.push(this.notes[iClosestBin]);
     }
-    console.log('generated note events from data: ');
-    console.log(events);
+    console.log("generated note events from data: ", events);
     return events;
   }
 
@@ -149,8 +158,7 @@ export class Instrument {
   createSequence(events?: string[], subdivision?: string) {
     const tmpEvents = events ? events : this.sequenceEvents;
     const tmpSubdivision = subdivision ? subdivision : this.sequenceSubdivision;
-    console.log('setting sequence with tempo ' + tmpSubdivision + ':');
-    console.log(tmpEvents);
+    console.log("setting sequence with tempo ", tmpSubdivision, ":", tmpEvents);
     this.sequence = new Tone.Sequence(
       (time, note) => {
         this.synth.triggerAttackRelease(note, this.noteDuration, time);
@@ -167,21 +175,21 @@ export class Instrument {
 
   playSequence() {
     if (this.sequence !== null) {
-      console.log('starting sequence');
+      console.log("starting sequence");
       this.sequence.start(); // 0 starts at beginning?
       this.isPlaying = true;
     } else {
-      console.log('no sequence on Instrument, call createSequence() first');
+      console.log("no sequence on Instrument, call createSequence() first");
     }
   }
 
   stopSequence() {
     if (this.sequence !== null) {
-      console.log('stopping sequence');
+      console.log("stopping sequence");
       this.sequence.stop();
       this.isPlaying = false;
     } else {
-      console.log('no sequence on Instrument, call createSequence() first');
+      console.log("no sequence on Instrument, call createSequence() first");
     }
   }
 
@@ -189,10 +197,11 @@ export class Instrument {
   // todo: check input validity for all these
   setScale(scaleName: keyof typeof scales) {
     this.scale = scales[scaleName];
+    console.log("set scale to", scaleName);
   }
 
   setSequenceTempo(tempo: string) {
-    console.log('setting sequence tempo to: ' + tempo);
+    console.log("setting sequence tempo to: " + tempo);
     this.sequenceSubdivision = tempo;
     this.sequence?.stop(); // todo: start at same note? check global sync
     this.createSequence(undefined, this.sequenceSubdivision);
@@ -200,7 +209,7 @@ export class Instrument {
   }
 
   setNoteDuration(duration: string) {
-    console.log('setting sequence tempo to: ' + duration);
+    console.log("setting sequence tempo to: " + duration);
     this.noteDuration = duration;
     this.sequence?.stop(); // todo: start at same note? check global sync
     this.createSequence(undefined, undefined);
