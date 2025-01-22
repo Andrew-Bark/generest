@@ -8,7 +8,7 @@
  */
 
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Shape from './components/Shape.tsx';
 import Line from './components/Line.tsx';
@@ -34,12 +34,12 @@ function App() {
     undefined
   );
 
-  // create the "menu" shapes (ensure that this only runs once)
-  // TODO: initialize with useEffect - outside of this function (move to top of file)
-  if (modules.length === 0) {
-    createShapes(addModule);
-    console.log('createShapes called');
-  }
+  useEffect(() => {
+    if (modules.length === 0) {
+      createShapes(addModule);
+      console.log('createShapes called');
+    }
+  }, [modules, addModule]);
 
   // Starts playing
   const handleStart = () => {
