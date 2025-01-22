@@ -10,8 +10,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import Shape from './components/Shape.tsx';
-import Line from './components/Line.tsx';
 import Module from './models/module.ts';
 import { ConnectionObj, ModuleObj } from './models/types.ts';
 import Connection from './models/connection.ts';
@@ -27,6 +25,8 @@ import {
   removeConnectionUtility,
   updateConnectionUtility
 } from './helpers/connections.helper.ts';
+import RenderConnections from './components/RenderConnections.tsx';
+import RenderModules from './components/RenderModules.tsx';
 
 function App() {
   const [modules, setModules] = useState<ModuleObj[]>([]);
@@ -86,38 +86,6 @@ function App() {
   }
   // <- End of State Handlers ->
 
-  function renderModules() {
-    return (
-      <>
-        {modules.map((moduleObj) => (
-          <Shape
-            moduleObj={moduleObj}
-            addModule={addModule}
-            updateModule={updateModule}
-            addConnection={addConnection}
-            hotConnection={hotConnection}
-            setHotConnection={setHotConnection}
-            key={moduleObj.id}
-          ></Shape>
-        ))}
-      </>
-    );
-  }
-
-  function renderConnections() {
-    return (
-      <>
-        {connections.map((connectionObj) => (
-          <Line
-            connectionObj={connectionObj}
-            modules={modules}
-            key={connectionObj.id}
-          ></Line>
-        ))}
-      </>
-    );
-  }
-
   return (
     <>
       <span onContextMenu={(e) => e.nativeEvent.preventDefault()}>
@@ -125,8 +93,21 @@ function App() {
         <button onClick={audio.stop}>stop</button>
         <Canvas camera={{ position: [0, 0, 20], fov: 40 }}>
           <Environment />
-          {modules.length ? renderModules() : <p>No modules found.</p>}
-          {connections.length ? renderConnections() : null}
+          {modules.length ? (
+            <RenderModules
+              modules={modules}
+              addModule={addModule}
+              updateModule={updateModule}
+              addConnection={addConnection}
+              hotConnection={hotConnection}
+              setHotConnection={setHotConnection}
+            />
+          ) : (
+            <p>No modules found.</p>
+          )}
+          {connections.length ? (
+            <RenderConnections connections={connections} modules={modules} />
+          ) : null}
         </Canvas>
       </span>
     </>
