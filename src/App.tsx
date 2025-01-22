@@ -28,7 +28,7 @@ import {
 import RenderConnections from './components/RenderConnections.tsx';
 import RenderModules from './components/RenderModules.tsx';
 
-function App() {
+export default function App() {
   const [modules, setModules] = useState<ModuleObj[]>([]);
   const [connections, setConnections] = useState<ConnectionObj[]>([]);
   const [hotConnection, setHotConnection] = useState<ModuleObj | undefined>(
@@ -39,8 +39,6 @@ function App() {
   useEffect(() => {
     if (modules.length === 0) createShapes(addModule);
   }, [modules, addModule]);
-
-
 
   // <- State Handlers ->
   function addModule(newModule: Module): void {
@@ -102,5 +100,3 @@ function App() {
     </>
   );
 }
-
-export default App;
