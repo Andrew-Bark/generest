@@ -49,7 +49,7 @@ function App() {
     });
   }
 
-  function updateModule(moduleObj) {
+  function updateModule(moduleObj: ModuleObj): void {
     setModules((existingModules) => {
       return updateModuleUtility(existingModules, moduleObj);
     });
