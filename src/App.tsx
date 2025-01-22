@@ -18,24 +18,11 @@ import { Datasource } from "./datasource.tsx";
 import Module from "./models/module.ts";
 import { ConnectionObj, ModuleObj } from "./models/types.ts";
 import Connection from "./models/connection.ts";
-
-// to track the state of modules in App.tsx, modules are wrapped in an object with numeric id
-// (this can probably be refactored, it is a relatively late addition)
-// TODO: Move to a models/types.ts
-
-// A connection is formed between two modules, from a datasource
-// (in the future maybe also from a trigger) to an instrument
-// TODO: Move to models/Connection.ts
-
-// to track the state of connections in App.tsx, connections are wrapped in an object with numeric id
-// TODO: Move to a models/types.ts
+import Environment from "./components/Environment.tsx";
 
 function App() {
-  // States ###############################################
   const [modules, setModules] = useState<ModuleObj[]>([]);
   const [connections, setConnections] = useState<ConnectionObj[]>([]);
-  // when the user clicks on a module to connect it to another, this state will be
-  // set to the first module (datasource/instrument) in Shape.tsx, otherwise it is null
   const [hotConnection, setHotConnection] = useState<ModuleObj | undefined>(
     undefined
   );
@@ -197,27 +184,6 @@ function App() {
             : null}
         </Canvas>
       </span>
-    </>
-  );
-}
-
-// Component for lighting, etc.
-// TODO: Move to components/Environment.tsx
-function Environment() {
-  const dirLightPos = new Vector3(5, 2, 5);
-
-  // JSX
-  return (
-    <>
-      {/* <OrbitControls> */}
-      <ambientLight intensity={1.0} />
-      {/* directionalLight: sun; casts shadows; infinitely far w/ parallel rays */}
-      {/* pointLight: light bulb */}
-      <directionalLight color="white" position={dirLightPos} />
-      <mesh position={dirLightPos} visible={false} /* DEBUG */>
-        <boxGeometry />
-      </mesh>
-      {/* </OrbitControls> */}
     </>
   );
 }
