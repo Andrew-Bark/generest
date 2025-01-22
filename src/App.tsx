@@ -36,28 +36,25 @@ function App() {
   );
 
   useEffect(() => {
-    if (modules.length === 0) {
-      createShapes(addModule);
-      console.log('createShapes called');
-    }
+    if (modules.length === 0) createShapes(addModule);
   }, [modules, addModule]);
 
-  // Starts playing
-  const handleStart = () => {
-    transport.start();
-    modules.forEach((m) => {
-      if (m.module.type === 'instrument') m.module.instrument?.playSequence();
-    });
+  const audio = {
+    start: () => {
+      transport.start();
+      modules.forEach((m) => {
+        m.module.type === 'instrument' && m.module.instrument?.playSequence();
+      });
+    },
+    stop: () => {
+      transport.stop();
+      modules.forEach((m) => {
+        m.module.type === 'instrument' && m.module.instrument?.stopSequence();
+      });
+    }
   };
 
-  // Stops playing
-  const handleStop = () => {
-    transport.stop();
-    modules.forEach((m) => {
-      if (m.module.type === 'instrument') m.module.instrument?.stopSequence();
-    });
-  };
-
+  // <- State Handlers ->
   function addModule(newModule: Module): void {
     setModules((existingModules) => {
       return addModuleUtility(existingModules, { module: newModule });
@@ -87,6 +84,7 @@ function App() {
       return updateConnectionUtility(existingConnections, connectionObj);
     });
   }
+  // <- End of State Handlers ->
 
   function renderModules() {
     return (
@@ -123,8 +121,8 @@ function App() {
   return (
     <>
       <span onContextMenu={(e) => e.nativeEvent.preventDefault()}>
-        <button onClick={handleStart}>start</button>
-        <button onClick={handleStop}>stop</button>
+        <button onClick={audio.start}>start</button>
+        <button onClick={audio.stop}>stop</button>
         <Canvas camera={{ position: [0, 0, 20], fov: 40 }}>
           <Environment />
           {modules.length ? renderModules() : <p>No modules found.</p>}
