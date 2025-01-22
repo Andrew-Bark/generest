@@ -19,6 +19,10 @@ import Module from './models/module.ts';
 import { ConnectionObj, ModuleObj } from './models/types.ts';
 import Connection from './models/connection.ts';
 import Environment from './components/Environment.tsx';
+import {
+  addModuleUtility,
+  updateModuleUtility
+} from './helpers/modules.helper.ts';
 
 function App() {
   const [modules, setModules] = useState<ModuleObj[]>([]);
@@ -77,22 +81,13 @@ function App() {
 
   function addModule(newModule: Module): void {
     setModules((existingModules) => {
-      if (!existingModules.length) return [{ id: 0, module: newModule }];
-      const maxId = existingModules.reduce((a, b) => (a.id > b.id ? a : b)).id;
-
-      const updatedModules = [
-        ...existingModules,
-        { id: maxId + 1, module: newModule }
-      ];
-      return updatedModules;
+      return addModuleUtility(existingModules, { module: newModule });
     });
   }
 
-  function updateModule(moduleObj: ModuleObj): void {
+  function updateModule(moduleObj) {
     setModules((existingModules) => {
-      const updatedModules = [...existingModules];
-      updatedModules[moduleObj.id].module = moduleObj.module;
-      return updatedModules;
+      return updateModuleUtility(existingModules, moduleObj);
     });
   }
 
