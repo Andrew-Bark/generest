@@ -15,6 +15,7 @@ import Line from './components/Line.tsx';
 import Module from './models/module.ts';
 import { ConnectionObj, ModuleObj } from './models/types.ts';
 import Connection from './models/connection.ts';
+import { transport } from './instrument.tsx';
 import Environment from './components/Environment.tsx';
 import { createShapes } from './helpers/shapes.helper.ts';
 import {
