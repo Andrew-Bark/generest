@@ -13,7 +13,7 @@ import { Canvas } from '@react-three/fiber';
 import Module from './models/module.ts';
 import { ConnectionObj, ModuleObj } from './models/types.ts';
 import Connection from './models/connection.ts';
-import { transport } from './instrument.tsx';
+import {AudioControls} from './lib/audioControls.ts';
 import Environment from './components/Environment.tsx';
 import { createShapes } from './helpers/shapes.helper.ts';
 import {
@@ -34,25 +34,13 @@ function App() {
   const [hotConnection, setHotConnection] = useState<ModuleObj | undefined>(
     undefined
   );
+  const audio = AudioControls(modules);
 
   useEffect(() => {
     if (modules.length === 0) createShapes(addModule);
   }, [modules, addModule]);
 
-  const audio = {
-    start: () => {
-      transport.start();
-      modules.forEach((m) => {
-        m.module.type === 'instrument' && m.module.instrument?.playSequence();
-      });
-    },
-    stop: () => {
-      transport.stop();
-      modules.forEach((m) => {
-        m.module.type === 'instrument' && m.module.instrument?.stopSequence();
-      });
-    }
-  };
+
 
   // <- State Handlers ->
   function addModule(newModule: Module): void {
@@ -89,6 +77,7 @@ function App() {
   return (
     <>
       <span onContextMenu={(e) => e.nativeEvent.preventDefault()}>
+        {/* TODO: Move buttons to own component - small window */}
         <button onClick={audio.start}>start</button>
         <button onClick={audio.stop}>stop</button>
         <Canvas camera={{ position: [0, 0, 20], fov: 40 }}>
