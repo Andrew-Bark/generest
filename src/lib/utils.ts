@@ -1,11 +1,11 @@
 import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { twMerge as tailwindMergeClasses } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return tailwindMergeClasses(clsx(inputs));
 }
 
-export const createID = (collection) => {
+export const createID = (collection)=> {
   try {
     if (!collection.length)
       throw new Error('Array is empty. Cannot create an ID.');
