@@ -23,6 +23,11 @@ import {
   addModuleUtility,
   updateModuleUtility
 } from './helpers/modules.helper.ts';
+import {
+  addConnectionUtility,
+  removeConnectionUtility,
+  updateConnectionUtility
+} from './helpers/connections.helper.ts';
 
 function App() {
   const [modules, setModules] = useState<ModuleObj[]>([]);
@@ -93,33 +98,19 @@ function App() {
 
   function addConnection(newConnection: Connection): void {
     setConnections((existingConnections) => {
-      if (!existingConnections.length)
-        return [{ id: 0, connection: newConnection }];
-      // find highest existing id
-      const maxId = existingConnections.reduce((a, b) =>
-        a.id > b.id ? a : b
-      ).id;
-      return [
-        ...existingConnections,
-        { id: maxId + 1, connection: newConnection }
-      ];
+      return addConnectionUtility(existingConnections, newConnection);
     });
   }
 
-  // TODO: Add remove connection function -> add to connections utility
   function removeConnection(connectionId: number): void {
-    setConnections((existingConnections) =>
-      existingConnections.filter((conn) => conn.id !== connectionId)
-    );
+    setConnections((existingConnections) => {
+      return removeConnectionUtility(existingConnections, connectionId);
+    });
   }
 
-  // TODO: Remove function
   function updateConnection(connectionObj: ConnectionObj): void {
     setConnections((existingConnections) => {
-      const updatedConnections = [...existingConnections];
-      updatedConnections[connectionObj.id].connection =
-        connectionObj.connection;
-      return updatedConnections;
+      return updateConnectionUtility(existingConnections, connectionObj);
     });
   }
 
