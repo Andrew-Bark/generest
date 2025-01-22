@@ -4,7 +4,7 @@
 import "./Controls.css";
 import { Html } from "@react-three/drei";
 import { Instrument } from "../instrument";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "./ui/slider";
@@ -34,7 +34,6 @@ function ControlsInstrument({ instrument }: controlsProps) {
 
   const [isPlaying, setIsPlaying] = useState(instrument.isPlaying);
   const [isOpen, setIsOpen] = useState(true);
-
   const [formData, setFormData] = useState<IFormData>({
     tempo: {
       title: "Tempo",
@@ -44,7 +43,7 @@ function ControlsInstrument({ instrument }: controlsProps) {
     },
     scale: {
       title: "Scale",
-      sliderPointer: [0],
+      sliderPointer: [scaleArray.indexOf(instrument.scaleName)],
       callback: (scaleName) => instrument.setScale(scaleName),
       array: scaleArray,
     },
@@ -105,14 +104,12 @@ function ControlsInstrument({ instrument }: controlsProps) {
   return (
     <Html>
       {isOpen && (
-        <Card className="bg-stone-800 relative w-[300px] " ref={cardRef}>
+        <Card className=" w-[300px] " ref={cardRef}>
           <CardHeader className="flex flex-row  justify-between items-baseline">
             <Button onClick={handleClickPlay}>
               <Play className={isPlaying ? "fill-white" : ""} />
             </Button>
-            <CardTitle className="text-white text-center text-xl">
-              Instrument
-            </CardTitle>
+            <CardTitle>Instrument</CardTitle>
             <Button onClick={handleClickStop}>
               <Square className={isPlaying ? "" : "fill-white"} />
             </Button>

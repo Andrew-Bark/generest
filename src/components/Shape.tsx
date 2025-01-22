@@ -9,7 +9,6 @@ import { useFrame } from "@react-three/fiber";
 import { Mesh, Vector3 } from "three";
 import { useSpring, animated } from "@react-spring/three";
 import { DragControls, Html } from "@react-three/drei";
-// import { Html } from "@react-three/drei";
 import ControlsInstrument from "@/components/ControlsInstrument";
 import ControlsDatasource from "@/components/ControlsDatasource";
 import { connectSourceToInstrument } from "@/helpers/shape-function";
@@ -188,7 +187,7 @@ ShapeProps) {
             (moduleObj.module.type === "instrument" ? (
               <ControlsInstrument instrument={moduleObj.module.instrument!} />
             ) : moduleObj.module.type === "datasource" ? (
-              <ControlsDatasource />
+              <ControlsDatasource datasource={moduleObj.module.datasource} />
             ) : null)}
 
           {/* uncomment the following to track whether this object re-renders due to state change (import Html from drei) */}

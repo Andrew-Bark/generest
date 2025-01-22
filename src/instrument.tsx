@@ -45,6 +45,7 @@ export const scales = {
 export class Instrument {
   synth: Tone.Synth; // synthesizer
   scale: string[]; // musical scale (notes only)
+  scaleName: string;
   octave: number; // middle octave number
   rangeOct: number; // range of octaves
   notes: string[]; // list of playable notes (scale x octave)
@@ -63,6 +64,7 @@ export class Instrument {
     // create synthesizer and connect to main output (speakers)
     this.synth = new Tone.Synth().toDestination();
     this.synth.volume.value = -8;
+    this.scaleName = "Dminor";
     console.log("VOL: ", this.synth.volume.value);
     this.scale = scales["Dminor"];
     (this.octave = 4), (this.rangeOct = 2), (this.sequence = null);
@@ -197,6 +199,7 @@ export class Instrument {
   // todo: check input validity for all these
   setScale(scaleName: keyof typeof scales) {
     this.scale = scales[scaleName];
+    this.scaleName = scaleName;
     console.log("set scale to", scaleName);
   }
 
