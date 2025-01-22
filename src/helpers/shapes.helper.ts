@@ -6,14 +6,14 @@ import { Instrument } from '../instrument';
 export function createShapes(addModule: (module: Module) => void) {
   const datasource = new Module(
     'datasource',
-    new Vector3(-3, 6, 0),
+    new Vector3(-3, 5, 0),
     undefined,
     new Datasource()
   );
 
   const instrument = new Module(
     'instrument',
-    new Vector3(3, 6, 0),
+    new Vector3(3, 5, 0),
     new Instrument(),
     undefined
   );
