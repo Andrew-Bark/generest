@@ -37,6 +37,9 @@ export class Datasource {
   /** Set the middle part of the query url (sensor name in Newcastle Urban Observatory) */
   setEntity(entity: string) {
     this.entity = entity;
+    const yesterday = new Date(Date.now());
+    yesterday.setDate(yesterday.getDate() - 1);
+    this.getFullDay(yesterday);
   }
 
   /** Get a full day of sensor (entity) data from the Newcastle Urban Observatory */

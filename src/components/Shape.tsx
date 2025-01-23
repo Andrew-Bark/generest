@@ -187,7 +187,7 @@ ShapeProps) {
             (moduleObj.module.type === "instrument" ? (
               <ControlsInstrument instrument={moduleObj.module.instrument!} />
             ) : moduleObj.module.type === "datasource" ? (
-              <ControlsDatasource datasource={moduleObj.module.datasource} />
+              <ControlsDatasource module={moduleObj.module} />
             ) : null)}
 
           {/* uncomment the following to track whether this object re-renders due to state change (import Html from drei) */}

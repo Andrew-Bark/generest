@@ -27,9 +27,7 @@ import {
 } from "./helpers/connections.helper.ts";
 import RenderConnections from "./components/RenderConnections.tsx";
 import RenderModules from "./components/RenderModules.tsx";
-import { Button } from "./components/ui/button.tsx";
 import { Html } from "@react-three/drei";
-import { Play, Square } from "lucide-react";
 import GlobalActionButton from "./components/GlobalActionButton.tsx";
 
 export default function App() {
