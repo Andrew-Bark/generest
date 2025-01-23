@@ -48,31 +48,31 @@ export default function App() {
 
   // <- State Handlers ->
   function addModule(newModule: Module): void {
-    setModules((existingModules) => {
+    setModules((existingModules: ModuleObj[]) => {
       return addModuleUtility(existingModules, { module: newModule });
     });
   }
 
   function updateModule(moduleObj: ModuleObj): void {
-    setModules((existingModules) => {
+    setModules((existingModules: ModuleObj[]) => {
       return updateModuleUtility(existingModules, moduleObj);
     });
   }
 
   function addConnection(newConnection: Connection): void {
-    setConnections((existingConnections) => {
+    setConnections((existingConnections: ConnectionObj[]) => {
       return addConnectionUtility(existingConnections, newConnection);
     });
   }
 
   function removeConnection(connectionId: number): void {
-    setConnections((existingConnections) => {
+    setConnections((existingConnections: ConnectionObj[]) => {
       return removeConnectionUtility(existingConnections, connectionId);
     });
   }
 
   function updateConnection(connectionObj: ConnectionObj): void {
-    setConnections((existingConnections) => {
+    setConnections((existingConnections: ConnectionObj[]) => {
       return updateConnectionUtility(existingConnections, connectionObj);
     });
   }
