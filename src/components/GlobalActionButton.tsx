@@ -25,7 +25,7 @@ const GlobalActionButton = ({
         <TooltipTrigger
           className={"text-white border-none"}
           onClick={() => {
-            callback(), setIsPlaying(!isPlaying);
+            callback(), setIsPlaying(type === "play" ? true : false);
           }}
           aria-label={type}
         >
