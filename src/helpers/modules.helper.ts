@@ -1,6 +1,7 @@
 import { createID } from "@/lib/utils";
+import { ModuleObj } from "@/models/types";
 
-export const addModuleUtility = (modules, newModule) => {
+export const addModuleUtility = (modules: ModuleObj[], newModule: ModuleObj) => {
   try {
     return [...modules, { ...newModule, id: createID(modules) }];
   } catch (e) {
@@ -9,7 +10,7 @@ export const addModuleUtility = (modules, newModule) => {
   }
 };
 
-export const updateModuleUtility = (modules, updatedModule) => {
+export const updateModuleUtility = (modules: ModuleObj[], updatedModule: ModuleObj) => {
   try {
     return modules.map((module) =>
       module.id === updatedModule.id ? updatedModule : module

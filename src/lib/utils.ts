@@ -5,7 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return tailwindMergeClasses(clsx(inputs));
 }
 
-export const createID = (collection)=> {
+interface CollectionItem {
+  id: number;
+}
+
+export const createID = (collection: CollectionItem[]): number => {
   try {
     if (!collection.length)
       throw new Error('Array is empty. Cannot create an ID.');
