@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, XAxis } from "recharts";
 
 import {
   ChartConfig,
@@ -9,7 +9,7 @@ import {
 
 const chartConfig = {
   people: {
-    label: "",
+    label: "people",
     color: "#2563eb",
   },
 } satisfies ChartConfig;
@@ -20,7 +20,7 @@ interface dataSourceChartProps {
 }
 export function DataSourceChart({ data, dataType }: dataSourceChartProps) {
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer config={chartConfig} className="min-h-[200px]">
       <BarChart accessibilityLayer data={data}>
         <XAxis dataKey={"timestamp"} tickLine={false} />
         <Bar dataKey={dataType} />

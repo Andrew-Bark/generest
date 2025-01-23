@@ -56,7 +56,7 @@ function ControlsDatasource({ datasource }: ControlsDataSourceProps) {
           <CardTitle>Data Source</CardTitle>
           <CardDescription>{dataDescription}</CardDescription>
         </CardHeader>
-        <CardContent className="text-blue-500">
+        <CardContent className="text-blue-500 ">
           <DataSourceChart data={numberArray} dataType="people" />
         </CardContent>
       </Card>

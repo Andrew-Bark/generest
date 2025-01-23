@@ -2,6 +2,8 @@ import { transport } from '@/instrument.tsx';
 import { ModuleObj } from '@/models/types';
 
 export function AudioControls(modules: ModuleObj[]) {
+  console.log("modules", modules);
+  
   return {
     start: () => {
       transport.start();
@@ -21,3 +23,5 @@ export function AudioControls(modules: ModuleObj[]) {
     }
   };
 }
+
+

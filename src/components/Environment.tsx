@@ -1,7 +1,6 @@
-import { Vector3 } from 'three';
+import { Vector3 } from "three";
 
-export default function Environment () {
-
+export default function Environment() {
   const dirLightPos = new Vector3(5, 2, 5);
 
   return (
@@ -18,5 +17,3 @@ export default function Environment () {
     </>
   );
 }
-
-

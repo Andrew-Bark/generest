@@ -7,26 +7,30 @@
  * Guaranteed 100% AI free :)
  */
 
-import './App.css';
-import { useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import Module from './models/module.ts';
-import { ConnectionObj, ModuleObj } from './models/types.ts';
-import Connection from './models/connection.ts';
-import {AudioControls} from './lib/audioControls.ts';
-import Environment from './components/Environment.tsx';
-import { createShapes } from './helpers/shapes.helper.ts';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import Module from "./models/module.ts";
+import { ConnectionObj, ModuleObj } from "./models/types.ts";
+import Connection from "./models/connection.ts";
+import { AudioControls } from "./lib/audioControls.ts";
+import Environment from "./components/Environment.tsx";
+import { createShapes } from "./helpers/shapes.helper.ts";
 import {
   addModuleUtility,
-  updateModuleUtility
-} from './helpers/modules.helper.ts';
+  updateModuleUtility,
+} from "./helpers/modules.helper.ts";
 import {
   addConnectionUtility,
   removeConnectionUtility,
-  updateConnectionUtility
-} from './helpers/connections.helper.ts';
-import RenderConnections from './components/RenderConnections.tsx';
-import RenderModules from './components/RenderModules.tsx';
+  updateConnectionUtility,
+} from "./helpers/connections.helper.ts";
+import RenderConnections from "./components/RenderConnections.tsx";
+import RenderModules from "./components/RenderModules.tsx";
+import { Button } from "./components/ui/button.tsx";
+import { Html } from "@react-three/drei";
+import { Play, Square } from "lucide-react";
+import GlobalActionButton from "./components/GlobalActionButton.tsx";
 
 export default function App() {
   const [modules, setModules] = useState<ModuleObj[]>([]);
@@ -36,6 +40,8 @@ export default function App() {
   );
   const audio = AudioControls(modules);
 
+  // simple is playing state for the buttons
+  const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
     if (modules.length === 0) createShapes(addModule);
   }, [modules, addModule]);
@@ -75,9 +81,9 @@ export default function App() {
   return (
     <>
       <span onContextMenu={(e) => e.nativeEvent.preventDefault()}>
-        {/* TODO: Move buttons to own component - small window */}
-        <button onClick={audio.start}>start</button>
-        <button onClick={audio.stop}>stop</button>
+        <h1 className="text-4xl absolute left-1/2 -translate-x-1/2 translate-y-[130px] font-mono ">
+          Generest
+        </h1>
         <Canvas camera={{ position: [0, 0, 20], fov: 40 }}>
           <Environment />
           {modules.length ? (
@@ -95,6 +101,22 @@ export default function App() {
           {connections.length ? (
             <RenderConnections connections={connections} modules={modules} />
           ) : null}
+          <Html>
+            <div className="flex justify-between h-20 w-[300px] m-0 p-0 translate-y-[30vh] translate-x-[-150px]">
+              <GlobalActionButton
+                type="play"
+                callback={audio.start}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+              ></GlobalActionButton>
+              <GlobalActionButton
+                type="stop"
+                callback={audio.stop}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+              ></GlobalActionButton>
+            </div>
+          </Html>
         </Canvas>
       </span>
     </>
